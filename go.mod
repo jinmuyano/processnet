@@ -1,4 +1,4 @@
-module git2.superboss.cc/shumei.zwq/processnet
+module github.com/jinmuyano/processnet
 
 go 1.19
 

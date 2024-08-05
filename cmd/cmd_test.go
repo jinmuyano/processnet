@@ -5,8 +5,8 @@ import (
 	"testing"
 	"time"
 
-	"git2.superboss.cc/shumei.zwq/processnet/cni0"
-	"git2.superboss.cc/shumei.zwq/processnet/eth0"
+	"github.com/jinmuyano/cni0"
+	"github.com/jinmuyano/eth0"
 )
 
 // go test -run Test_eth0
