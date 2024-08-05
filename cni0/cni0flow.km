@@ -1,0 +1,243 @@
+{
+    "root": {
+        "data": {
+            "id": "d2za69wibzc0",
+            "created": 1721977768153,
+            "text": "容器网络环境统计进程的带宽"
+        },
+        "children": [
+            {
+                "data": {
+                    "id": "d2za6awy2hk0",
+                    "created": 1721977770357,
+                    "text": "interface.go"
+                },
+                "children": []
+            },
+            {
+                "data": {
+                    "id": "d2vontzumk00",
+                    "created": 1721612399794,
+                    "text": "流程",
+                    "layout": null,
+                    "font-family": "comic sans ms"
+                },
+                "children": [
+                    {
+                        "data": {
+                            "id": "d2vwqlyeo0w0",
+                            "created": 1721635186264,
+                            "text": "1.创建netflow对象",
+                            "layout": null
+                        },
+                        "children": [
+                            {
+                                "data": {
+                                    "id": "d2za8lqjr6o0",
+                                    "created": 1721977950643,
+                                    "text": "传递:收集哪些二进制进程名称",
+                                    "layout": null
+                                },
+                                "children": []
+                            },
+                            {
+                                "data": {
+                                    "id": "d2za90c7ffs0",
+                                    "created": 1721977982427,
+                                    "text": "传递:收集哪些服务的流量大小",
+                                    "layout": null
+                                },
+                                "children": []
+                            }
+                        ]
+                    },
+                    {
+                        "data": {
+                            "id": "d2vwr8pk6qo0",
+                            "created": 1721635235795,
+                            "text": "2.调用start方法",
+                            "expandState": "expand",
+                            "layout": null
+                        },
+                        "children": [
+                            {
+                                "data": {
+                                    "id": "d2vws4qh2lc0",
+                                    "created": 1721635305507,
+                                    "text": "2.1 归集进程和容器ip",
+                                    "layout": null
+                                },
+                                "children": [
+                                    {
+                                        "data": {
+                                            "id": "d2zjt4wuy1s0",
+                                            "created": 1722004949656,
+                                            "text": "/proc/pid/net/fib_trie"
+                                        },
+                                        "children": []
+                                    }
+                                ]
+                            },
+                            {
+                                "data": {
+                                    "id": "d2vwud7h1f40",
+                                    "created": 1721635480678,
+                                    "text": "2.2 抓包消费",
+                                    "layout": null
+                                },
+                                "children": [
+                                    {
+                                        "data": {
+                                            "id": "d2zbbrm79jc0",
+                                            "created": 1721981019643,
+                                            "text": "异步抓包写入消费队列",
+                                            "layout": null
+                                        },
+                                        "children": []
+                                    },
+                                    {
+                                        "data": {
+                                            "id": "d2zbl3wxtuo0",
+                                            "created": 1721981751691,
+                                            "text": "异步消费队列,消费数据包",
+                                            "layout": null
+                                        },
+                                        "children": [
+                                            {
+                                                "data": {
+                                                    "id": "d2zblae41nk0",
+                                                    "created": 1721981765790,
+                                                    "text": "循环从队列取出数据包,如果上下文done则结束",
+                                                    "layout": null
+                                                },
+                                                "children": []
+                                            },
+                                            {
+                                                "data": {
+                                                    "id": "d2zblhpfaw80",
+                                                    "created": 1721981781712,
+                                                    "text": "解析数据包",
+                                                    "layout": null
+                                                },
+                                                "children": [
+                                                    {
+                                                        "data": {
+                                                            "id": "d2zblookguw0",
+                                                            "created": 1721981796897,
+                                                            "text": "1.计算数据包大小",
+                                                            "layout": null
+                                                        },
+                                                        "children": []
+                                                    },
+                                                    {
+                                                        "data": {
+                                                            "id": "d2zblrsv86g0",
+                                                            "created": 1721981803688,
+                                                            "text": "2.数据包大小不为0,increaseTraffic.区分出入流量",
+                                                            "layout": null
+                                                        },
+                                                        "children": []
+                                                    },
+                                                    {
+                                                        "data": {
+                                                            "id": "d2zblut9vyg0",
+                                                            "created": 1721981810243,
+                                                            "text": "3.获取数据包属于哪个进程对象,如果进程对象不存在则创建(processHash   *processController)",
+                                                            "layout": null
+                                                        },
+                                                        "children": []
+                                                    },
+                                                    {
+                                                        "data": {
+                                                            "id": "d2zblzgfba00",
+                                                            "created": 1721981820349,
+                                                            "text": "4.如果获取进程失败,则加入延迟消费队列",
+                                                            "layout": null
+                                                        },
+                                                        "children": []
+                                                    },
+                                                    {
+                                                        "data": {
+                                                            "id": "d2zbma1l6eg0",
+                                                            "created": 1721981843397,
+                                                            "text": "5.解析流量大小归集到进程或者服务",
+                                                            "layout": null
+                                                        },
+                                                        "children": []
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "data": {
+                                    "id": "d2zbqbl1l2g0",
+                                    "created": 1721982160207,
+                                    "text": "2.3 异步循环同步网络数据,消费延迟队列"
+                                },
+                                "children": [
+                                    {
+                                        "data": {
+                                            "id": "d2zbqrfv38g0",
+                                            "created": 1721982194722,
+                                            "text": "startResourceSyncer"
+                                        },
+                                        "children": [
+                                            {
+                                                "data": {
+                                                    "id": "d2zbwqr0vqw0",
+                                                    "created": 1721982663405,
+                                                    "text": "处理未匹配进程的数据包,处理失败则再处理一次,再次失败则放弃",
+                                                    "layout_right_offset": {
+                                                        "x": -1,
+                                                        "y": 63
+                                                    }
+                                                },
+                                                "children": []
+                                            },
+                                            {
+                                                "data": {
+                                                    "id": "d2zbwvrpa2w0",
+                                                    "created": 1721982674330,
+                                                    "text": "再次归集进程和容器ip",
+                                                    "layout_right_offset": {
+                                                        "x": -1,
+                                                        "y": -55
+                                                    }
+                                                },
+                                                "children": []
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "data": {
+                                            "id": "d2zbu76g4u80",
+                                            "created": 1721982464074,
+                                            "text": "消费成功,则再次调用nf.increaseProcessTraffic(proc, entry.length, entry.side, entry.addr) "
+                                        },
+                                        "children": []
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "data": {
+                            "id": "d2vwri71chc0",
+                            "created": 1721635256443,
+                            "text": "3.启动定时任务,定时更新数据,执行流程2",
+                            "expandState": "expand",
+                            "layout": null
+                        },
+                        "children": []
+                    }
+                ]
+            }
+        ]
+    },
+    "template": "right",
+    "theme": "fresh-blue",
+    "version": "1.4.43"
+}
