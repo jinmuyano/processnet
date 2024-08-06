@@ -3,6 +3,10 @@
 - 支持统计进程下,外网出入流量
 - 支持统计指定服务ip:port,出入流量
 
+
+![image](https://github.com/user-attachments/assets/c636a347-5313-4a25-b710-ffa2dd036c3e)
+
+
 # 使用方法
 cmd/
 - |---- cmd_test.go
