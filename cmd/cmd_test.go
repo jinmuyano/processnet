@@ -44,7 +44,6 @@ func TestCronCni0(t *testing.T) {
 	// 	"192.168.162.1xx:30003": "zk-3",
 	// }
 	client := cni0.NewPacketClient(config)
-	// packet := pnet.NewPacket(client)
 	defer client.Stop()
 	client.Start()
 	for {

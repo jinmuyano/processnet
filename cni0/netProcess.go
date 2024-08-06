@@ -189,6 +189,9 @@ func GetProcesses(prockeywords []string) (map[string]*Process, error) {
 			}
 		}
 
+		if addr == "" {
+			continue
+		}
 		//执行完整路径
 		pname := getProcessName(exe) //=
 		// 初始化网络对应的进程对象
