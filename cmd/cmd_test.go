@@ -34,6 +34,28 @@ func Test_eth0(t *testing.T) {
 }
 
 // go test -run Test_cni0
+func Test_cni0_cron(t *testing.T) {
+	config := cni0.NewPacketClientConfig()
+	config.Interval = "10s" //抓包频率
+	config.ProcessKeyword = []string{"java", "curl"}
+	// config.ServiceAddr = map[string]string{
+	// 	"192.168.165.xx:30002":  "zk-1",
+	// 	"192.168.162.1xx:30002": "zk-2",
+	// 	"192.168.162.1xx:30003": "zk-3",
+	// }
+	client := cni0.NewPacketClient(config)
+	// packet := pnet.NewPacket(client)
+	defer client.Stop()
+	client.Start()
+	for {
+		time.Sleep(time.Second * 5)
+		fmt.Println("get band width")
+		data := client.GetBandWidth()
+		fmt.Println("data:", data)
+		time.Sleep(time.Second * 25)
+	}
+}
+
 func Test_cni0(t *testing.T) {
 	config := cni0.NewPacketClientConfig()
 	config.Interval = "10s" //抓包频率
