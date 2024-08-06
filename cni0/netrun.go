@@ -9,6 +9,7 @@ import (
 
 	"github.com/google/gopacket"
 	"github.com/google/gopacket/pcapgo"
+	"github.com/jinmuyano/processnet"
 	"github.com/mitchellh/go-ps"
 )
 
@@ -140,7 +141,7 @@ func stop(client *CniPacketClient) {
 		fmt.Println("stop 开始解析进程对应的网络带宽--->", pid)
 	}
 
-	result := make(map[int]BandWidth)
+	result := pnet.Result{}
 	for _, pid := range pidList {
 		// 解析 包速度
 		proc, err := Nf.GetProcess(pid, defaultCaptureNum) //关闭前解析包速度
@@ -149,7 +150,7 @@ func stop(client *CniPacketClient) {
 		} else {
 			fmt.Println("stop 收集到pid:", pid, "的解析速度")
 			// netMapNew[pid] = proc.TrafficStats
-			result[pid] = BandWidth{
+			result[pid] = pnet.BandWidth{
 				InRate:     proc.TrafficStats.InRate,
 				OutRate:    proc.TrafficStats.OutRate,
 				InService:  proc.InServiceNet,
@@ -160,5 +161,4 @@ func stop(client *CniPacketClient) {
 
 	client.setBandWidth(result)
 
-	Nf.Stop() //关闭抓包
 }

@@ -9,8 +9,9 @@ type BandWidth struct {
 
 type Result map[int]BandWidth //key为进程pid
 
-type PacketClient interface {
-	Start()               //启动抓包
-	Stop()                //关闭退出抓包
-	GetBandWidth() Result //获取流量统计结果
+type ClientInterface interface {
+	Start()               // 启动抓包.并开启定时任务,定时更新流量统计结果
+	Stop()                // 关闭定时任务
+	Run() Result          // 启动抓包获取流量统计结果返回
+	GetBandWidth() Result // 获取流量统计结果
 }

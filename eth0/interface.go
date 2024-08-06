@@ -3,6 +3,7 @@ package eth0
 import (
 	"fmt"
 
+	pnet "github.com/jinmuyano/processnet"
 	"github.com/robfig/cron"
 )
 
@@ -16,7 +17,7 @@ type BandWidth struct {
 type Result map[int]BandWidth
 type CniPacketClient struct {
 	conf    PacketClientConfig
-	Result  Result
+	Result  pnet.Result
 	crontab *cron.Cron
 }
 
@@ -49,17 +50,24 @@ func (c *CniPacketClient) Start() {
 	c.newcron()
 }
 
+func (c *CniPacketClient) Run() pnet.Result {
+	fmt.Println("start")
+	c.run() //启动+更新数据+分析带宽+结束
+	result := c.GetBandWidth()
+	return result
+}
+
 func (c *CniPacketClient) Stop() {
 	fmt.Println("stop exit")
 	c.crontab.Stop()
 }
 
-func (c *CniPacketClient) setBandWidth(data Result) {
+func (c *CniPacketClient) setBandWidth(data pnet.Result) {
 	fmt.Println("更新")
 	c.Result = data
 }
 
-func (c *CniPacketClient) GetBandWidth() Result {
+func (c *CniPacketClient) GetBandWidth() pnet.Result {
 	return c.Result
 }
 
@@ -76,7 +84,7 @@ func (c *CniPacketClient) newcron() {
 	c.crontab.Start()
 }
 
-func NewPacketClient(conf PacketClientConfig) *CniPacketClient {
+func NewPacketClient(conf PacketClientConfig) pnet.ClientInterface {
 	fmt.Println("new packet client")
 	return &CniPacketClient{
 		conf: conf,
