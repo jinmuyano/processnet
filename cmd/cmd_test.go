@@ -10,7 +10,7 @@ import (
 )
 
 // go test -run Test_eth0
-func Test_eth0_cron(t *testing.T) {
+func TestCronEth0(t *testing.T) {
 	config := eth0.NewPacketClientConfig()
 	config.Interval = "10s" //抓包频率
 	config.ProcessKeyword = []string{"java", "curl"}
@@ -34,7 +34,7 @@ func Test_eth0_cron(t *testing.T) {
 }
 
 // go test -run Test_cni0
-func Test_cni0_cron(t *testing.T) {
+func TestCronCni0(t *testing.T) {
 	config := cni0.NewPacketClientConfig()
 	config.Interval = "10s" //抓包频率
 	config.ProcessKeyword = []string{"java", "curl"}
@@ -56,7 +56,7 @@ func Test_cni0_cron(t *testing.T) {
 	}
 }
 
-func Test_cni0(t *testing.T) {
+func TestCni0(t *testing.T) {
 	config := cni0.NewPacketClientConfig()
 	config.ProcessKeyword = []string{"java", "curl"}
 	// config.ServiceAddr = map[string]string{
@@ -69,7 +69,7 @@ func Test_cni0(t *testing.T) {
 	fmt.Print(result)
 }
 
-func Test_eth0(t *testing.T) {
+func TestEth0(t *testing.T) {
 	config := eth0.NewPacketClientConfig()
 	config.ProcessKeyword = []string{"java", "curl"}
 	// config.ServiceAddr = map[string]string{
