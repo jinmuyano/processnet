@@ -28,6 +28,7 @@ type PacketClientConfig struct {
 	ServiceConfigUrl string            //解析指定ip地址,比如指定zk,mysql,redis访问的ip地址,某个项目的所有ip端口
 	ProcessKeyword   []string          //抓取的进程关键词,默认java
 	ServiceAddr      map[string]string //解析指定ip地址,比如指定zk,mysql,redis访问的ip地址,某个项目的所有ip端口
+	IsAllConn        bool              //是否抓取所有连接
 }
 
 func NewPacketClientConfig() PacketClientConfig {
@@ -36,6 +37,7 @@ func NewPacketClientConfig() PacketClientConfig {
 		IsRecordPublic:   true,
 		ServiceConfigUrl: "",
 		ProcessKeyword:   []string{"java"},
+		IsAllConn:        false,
 		// ServiceAddr: map[string]string{
 		// 	"192.168.165.xx:30002":  "zk-bak",
 		// 	"192.168.162.1xx:30002": "zk-erp",

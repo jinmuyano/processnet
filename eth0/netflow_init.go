@@ -40,7 +40,7 @@ var (
 func netflowStart(client *CniPacketClient) {
 	var err error
 
-	Nf, err = NewNetflow(WichProcKeywords(client.conf.ProcessKeyword), WichServiceAddr(client.conf.ServiceAddr)) //new对象,接口类型赋值,空的
+	Nf, err = NewNetflow(WichProcKeywords(client.conf.ProcessKeyword), WichServiceAddr(client.conf.ServiceAddr), WichIsAllConn(client.conf.IsAllConn)) //new对象,接口类型赋值,空的
 	if err != nil {
 		log.Println("创建netflow对象Nf失败", err)
 	}

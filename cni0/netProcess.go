@@ -285,7 +285,7 @@ func (po *Process) shrink() {
 	}
 }
 
-func (po *Process) IncreaseInput(n int64, addr string, serviceAddr map[string]string) {
+func (po *Process) IncreaseInput(n int64, addr string, serviceAddr map[string]string, isAllConn bool) {
 	// 统计进程外网流量
 	for ipport, service := range serviceAddr {
 		if strings.Contains(addr, ipport) {
@@ -306,6 +306,9 @@ func (po *Process) IncreaseInput(n int64, addr string, serviceAddr map[string]st
 			// fmt.Println("public addrList", addrList)
 			//来源于外网
 			po.InServiceNet["public|"+remoteAddr] += n
+		}
+		if isAllConn {
+			po.InServiceNet[localAddr] += n
 		}
 	}
 
@@ -336,7 +339,7 @@ func (po *Process) IncreaseInput(n int64, addr string, serviceAddr map[string]st
 }
 
 // IncreaseOutput
-func (po *Process) IncreaseOutput(n int64, addr string, serviceAddr map[string]string) {
+func (po *Process) IncreaseOutput(n int64, addr string, serviceAddr map[string]string, isAllConn bool) {
 	// 统计外网流量
 	for ipport, service := range serviceAddr {
 		if strings.Contains(addr, ipport) {
@@ -357,6 +360,9 @@ func (po *Process) IncreaseOutput(n int64, addr string, serviceAddr map[string]s
 			// fmt.Println("public addrList", addrList)
 			//来源于外网
 			po.OutServiceNet["public|"+remoteAddr] += n
+		}
+		if isAllConn {
+			po.OutServiceNet[remoteAddr] += n
 		}
 	}
 

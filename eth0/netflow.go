@@ -67,6 +67,7 @@ type Netflow struct {
 	procKeywords   []string          //统计那些进程流量的二进制命令
 	ServiceAddr    map[string]string // 统计那些指定服务地址的流量
 	ProcessAddrMap map[string]int    // 抓包前统计,netstat统计addr:port归属于哪个进程
+	IsAllConn      bool              // 是否统计所有连接带宽
 }
 
 type optionFunc func(*Netflow) error
@@ -99,6 +100,13 @@ func WichProcKeywords(procKeywords []string) optionFunc {
 func WichServiceAddr(serviceAddr map[string]string) optionFunc {
 	return func(o *Netflow) error {
 		o.ServiceAddr = serviceAddr
+		return nil
+	}
+}
+
+func WichIsAllConn(isallconn bool) optionFunc {
+	return func(o *Netflow) error {
+		o.IsAllConn = isallconn
 		return nil
 	}
 }
@@ -749,9 +757,9 @@ func (nf *Netflow) increaseProcessTraffic(proc *Process, length int64, side side
 	// 处理延迟和实时数据包都是这个函数
 	switch side {
 	case inputSide:
-		proc.IncreaseInput(length, addr, nf.ServiceAddr)
+		proc.IncreaseInput(length, addr, nf.ServiceAddr, nf.IsAllConn) //统计指定服务带宽,是否统计所有连接流量
 	case outputSide:
-		proc.IncreaseOutput(length, addr, nf.ServiceAddr)
+		proc.IncreaseOutput(length, addr, nf.ServiceAddr, nf.IsAllConn)
 	}
 	return nil
 }
