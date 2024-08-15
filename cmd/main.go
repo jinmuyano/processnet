@@ -83,10 +83,10 @@ func main() {
 	fmt.Println("进程出流量:", float64(out)/1024/1024*8, "mb/s")
 
 	// 打印进程入流量
-	fmt.Println("进程入流量:", float64(pidnet.InRate)/1024/1024, "mb/s")
+	// fmt.Println("进程入流量:", float64(pidnet.InRate)/1024/1024, "mb/s")
 	// fmt.Println("进程入流量:", float64(pidnet.InRate)/1024/1024, "mb/s")
 	// 打印进程出流量
-	fmt.Println("进程出流量:", float64(pidnet.OutRate)/1024/1024, "mb/s")
+	// fmt.Println("进程出流量:", float64(pidnet.OutRate)/1024/1024, "mb/s")
 	// fmt.Println("进程出流量:", float64(pidnet.OutRate)/1024/1024, "mb/s")
 
 }
