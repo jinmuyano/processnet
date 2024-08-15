@@ -56,10 +56,10 @@ func main() {
 	// 遍历排序后的切片，打印
 	var in int64
 	for _, pair := range in_pairs {
-		fmt.Printf("in:%s-> %fmb/s\n", pair.Key, float64(pair.Value)/1024/1024)
+		fmt.Printf("in:%s-> %fmb/s\n", pair.Key, float64(pair.Value)*8/1024/1024)
 		in += pair.Value
 	}
-	fmt.Println("进程入流量:", float64(in)/1024/1024, "mb/s")
+	fmt.Println("进程入流量:", float64(in)/1024/1024*8, "mb/s")
 
 	fmt.Println("----------------------------------")
 
@@ -76,11 +76,11 @@ func main() {
 	// 遍历排序后的切片，打印
 	var out int64
 	for _, pair := range out_pairs {
-		fmt.Printf("out:%s-> %fmb/s\n", pair.Key, float64(pair.Value)/1024/1024)
+		fmt.Printf("out:%s-> %fmb/s\n", pair.Key, float64(pair.Value)*8/1024/1024)
 		out += pair.Value
 	}
 
-	fmt.Println("进程出流量:", float64(out)/1024/1024, "mb/s")
+	fmt.Println("进程出流量:", float64(out)/1024/1024*8, "mb/s")
 
 	// 打印进程入流量
 	fmt.Println("进程入流量:", float64(pidnet.InRate)/1024/1024, "mb/s")
