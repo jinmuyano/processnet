@@ -156,6 +156,7 @@ func stop(client *CniPacketClient) {
 				OutRate:    proc.TrafficStats.OutRate,
 				InService:  proc.InServiceNet,
 				OutService: proc.OutServiceNet,
+				Cmdline:    proc.Cmdline,
 			}
 		}
 	}

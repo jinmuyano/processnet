@@ -33,10 +33,11 @@ type trafficEntry struct {
 }
 
 type Process struct {
-	Name  string `json:"name"`
-	Pid   string `json:"pid"`
-	Exe   string `json:"exe"`
-	State string `json:"state"`
+	Name    string `json:"name"`
+	Pid     string `json:"pid"`
+	Exe     string `json:"exe"`
+	State   string `json:"state"`
+	Cmdline string `json:"cmdline"`
 	// InodeCount   int                `json:"inode_count"`
 	Addr         string             `json:"addr"`
 	TrafficStats *trafficStatsEntry `json:"traffic_stats"`
@@ -145,6 +146,23 @@ func getProcessName(exe string) string {
 	return strings.Title(name)
 }
 
+func getcmdlineProject(pid string) string {
+
+	cmdlinefile := fmt.Sprintf("/proc/%s/cmdline", pid)
+	// 读取io
+	content, err := ioutil.ReadFile(cmdlinefile)
+	if err != nil {
+		return ""
+	}
+	cmdline := string(content)
+
+	// 将所有的\x00替换成空格
+	cmdLineWithSpaces := strings.ReplaceAll(cmdline, "\x00", " ")
+	cmdLineWithSpaces = strings.Trim(cmdLineWithSpaces, " ")
+
+	return cmdLineWithSpaces
+}
+
 func GetProcesses(prockeywords []string) (map[string]*Process, error) {
 	// 整理进程inode列表
 	// to improve performance
@@ -194,12 +212,17 @@ func GetProcesses(prockeywords []string) (map[string]*Process, error) {
 		}
 		//执行完整路径
 		pname := getProcessName(exe) //=
+
+		// 获取命令行参数
+		cmdline := getcmdlineProject(pid)
+
 		// 初始化网络对应的进程对象
 		ppm[pid] = &Process{
 			Pid:           pid,
 			Name:          pname, //执行完整路径
 			Exe:           exe,   //
 			Addr:          addr,
+			Cmdline:       cmdline,
 			TrafficStats:  new(trafficStatsEntry),
 			InServiceNet:  map[string]int64{}, // increase包时使用
 			OutServiceNet: map[string]int64{},

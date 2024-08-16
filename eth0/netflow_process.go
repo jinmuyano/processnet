@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"os"
 	"path/filepath"
 	"regexp"
@@ -21,6 +22,7 @@ type Process struct {
 	Name         string             `json:"name"`
 	Pid          string             `json:"pid"`
 	Exe          string             `json:"exe"`
+	Cmdline      string             `json:"cmdline"` // 进程命令行参数
 	State        string             `json:"state"`
 	InodeCount   int                `json:"inode_count"`
 	TrafficStats *trafficStatsEntry `json:"traffic_stats"`
@@ -276,14 +278,18 @@ func GetProcesses(prockeywords []string) (map[string]*Process, error) {
 		}
 
 		//执行完整路径
-		pname := getProcessName(exe) //=
+		pname := getProcessName(exe)
+
+		// 获取进程命令行
+		cmdline := getcmdlineProject(pid)
 		// 初始化网络对应的进程对象
 		ppm[pid] = &Process{
 			Pid:           pid,
 			inodes:        []string{inode}, //socket-id列表
 			InodeCount:    1,
-			Name:          pname, //执行完整路径
-			Exe:           exe,   //
+			Name:          pname, //执行完整路径--->java
+			Cmdline:       cmdline,
+			Exe:           exe, //exe -> /usr/local/jdk1.8.0_112/bin/java
 			TrafficStats:  new(trafficStatsEntry),
 			InServiceNet:  map[string]int64{}, // increase包时使用
 			OutServiceNet: map[string]int64{},
@@ -540,7 +546,9 @@ func (pm *processController) Reset() {
 	pm.inodePidMap = make(map[string]string, 1000)
 }
 
-// getProcessExe
+/*
+1.执行路径:exe -> /usr/local/jdk1.8.0_112/bin/java
+*/
 func getProcessExe(pid string) string {
 	exe := fmt.Sprintf("/proc/%s/exe", pid)
 	path, _ := os.Readlink(exe)
@@ -552,6 +560,27 @@ func getProcessName(exe string) string {
 	n := strings.Split(exe, "/")
 	name := n[len(n)-1]
 	return strings.Title(name)
+}
+
+/*
+1.根据cmdline文件获取项目名称
+*/
+
+func getcmdlineProject(pid string) string {
+
+	cmdlinefile := fmt.Sprintf("/proc/%s/cmdline", pid)
+	// 读取io
+	content, err := ioutil.ReadFile(cmdlinefile)
+	if err != nil {
+		return ""
+	}
+	cmdline := string(content)
+
+	// 将所有的\x00替换成空格
+	cmdLineWithSpaces := strings.ReplaceAll(cmdline, "\x00", " ")
+	cmdLineWithSpaces = strings.Trim(cmdLineWithSpaces, " ")
+
+	return cmdLineWithSpaces
 }
 
 // findPid unuse
