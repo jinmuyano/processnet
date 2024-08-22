@@ -24,7 +24,7 @@ const (
 	defaultCaptureTimeout = time.Duration(1*time.Second) * defaultCaptureNum //抓包持续时间
 )
 
-func NewNetflow(processKeywords []string, serviceAddr map[string]string, isAllConn bool) (*Netflow, error) {
+func NewNetflow(processKeywords []string, serviceAddr map[string]string, isAllConn bool, isRecordPublic bool) (*Netflow, error) {
 
 	ips, devs := parseIpaddrsAndDevices() //获取服务器eth0 ip和设备
 	// 打印ip和设备
@@ -51,8 +51,9 @@ func NewNetflow(processKeywords []string, serviceAddr map[string]string, isAllCo
 		syncInterval:   defaultSyncInterval,   //1s
 		pcapFileName:   "",
 		// procKeywords:   processKeywords,
-		ServiceAddr: serviceAddr,
-		IsAllConn:   isAllConn,
+		ServiceAddr:    serviceAddr,
+		IsAllConn:      isAllConn,
+		IsRecordPublic: isRecordPublic,
 	}
 
 	nf.packetQueue = make(chan gopacket.Packet, nf.qsize) //2w大小
@@ -253,9 +254,9 @@ func (nf *Netflow) increaseProcessTraffic(proc *Process, length int64, side side
 	// fmt.Println(length, addr, side, proc.Pid)
 	switch side {
 	case inputSide:
-		proc.IncreaseInput(length, addr, nf.ServiceAddr, nf.IsAllConn)
+		proc.IncreaseInput(length, addr, nf.ServiceAddr, nf.IsAllConn, nf.IsRecordPublic)
 	case outputSide:
-		proc.IncreaseOutput(length, addr, nf.ServiceAddr, nf.IsAllConn)
+		proc.IncreaseOutput(length, addr, nf.ServiceAddr, nf.IsAllConn, nf.IsRecordPublic)
 	}
 	return nil
 }

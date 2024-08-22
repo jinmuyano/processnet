@@ -69,14 +69,15 @@ type Netflow struct {
 	exitFunc []func()
 	timer    *time.Timer
 
-	ServiceAddr map[string]string // 统计那些指定服务地址的流量
-	IsAllConn   bool              // 是否统计所有连接流量
+	ServiceAddr    map[string]string // 统计那些指定服务地址的流量
+	IsAllConn      bool              // 是否统计所有连接流量
+	IsRecordPublic bool              // 是否记录公网IP
 }
 
 func netflowStart(client *CniPacketClient) {
 	var err error
 
-	Nf, err = NewNetflow(client.conf.ProcessKeyword, client.conf.ServiceAddr, client.conf.IsAllConn) //new对象,接口类型赋值,空的
+	Nf, err = NewNetflow(client.conf.ProcessKeyword, client.conf.ServiceAddr, client.conf.IsAllConn, client.conf.IsRecordPublic) //new对象,接口类型赋值,空的
 	if err != nil {
 		log.Println("创建netflow对象Nf失败", err)
 	}

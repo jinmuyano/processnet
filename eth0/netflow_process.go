@@ -89,7 +89,7 @@ func (po *Process) shrink() {
 	}
 }
 
-func (po *Process) IncreaseInput(n int64, addr string, serviceAddr map[string]string, isAllConn bool) {
+func (po *Process) IncreaseInput(n int64, addr string, serviceAddr map[string]string, isAllConn bool, isRecordPublic bool) {
 	// 统计进程外网流量
 	for ipport, service := range serviceAddr {
 		if strings.Contains(addr, ipport) {
@@ -101,16 +101,19 @@ func (po *Process) IncreaseInput(n int64, addr string, serviceAddr map[string]st
 	if len(addrList) == 2 {
 		localAddr := addrList[0]
 		remoteAddr := addrList[1]
-		if !strings.HasPrefix(localAddr, "192.168") && !strings.HasPrefix(localAddr, "10.") {
-			//来源于外网
-			// fmt.Println("public addrList", addrList)
-			po.InServiceNet["public|"+localAddr] += n
+		if isRecordPublic {
+			if !strings.HasPrefix(localAddr, "192.168") && !strings.HasPrefix(localAddr, "10.") {
+				//来源于外网
+				// fmt.Println("public addrList", addrList)
+				po.InServiceNet["public|"+localAddr] += n
+			}
+			if !strings.HasPrefix(remoteAddr, "192.168") && !strings.HasPrefix(remoteAddr, "10.") {
+				// fmt.Println("public addrList", addrList)
+				//来源于外网
+				po.InServiceNet["public|"+remoteAddr] += n
+			}
 		}
-		if !strings.HasPrefix(remoteAddr, "192.168") && !strings.HasPrefix(remoteAddr, "10.") {
-			// fmt.Println("public addrList", addrList)
-			//来源于外网
-			po.InServiceNet["public|"+remoteAddr] += n
-		}
+
 		if isAllConn {
 			po.InServiceNet[localAddr] += n
 		}
@@ -143,7 +146,7 @@ func (po *Process) IncreaseInput(n int64, addr string, serviceAddr map[string]st
 }
 
 // IncreaseOutput
-func (po *Process) IncreaseOutput(n int64, addr string, serviceAddr map[string]string, isAllConn bool) {
+func (po *Process) IncreaseOutput(n int64, addr string, serviceAddr map[string]string, isAllConn bool, isRecordPublic bool) {
 	// 统计外网流量
 	for ipport, service := range serviceAddr {
 		if strings.Contains(addr, ipport) {
@@ -155,16 +158,19 @@ func (po *Process) IncreaseOutput(n int64, addr string, serviceAddr map[string]s
 	if len(addrList) == 2 {
 		localAddr := addrList[0]
 		remoteAddr := addrList[1]
-		if !strings.HasPrefix(localAddr, "192.168") && !strings.HasPrefix(localAddr, "10.") {
-			//来源于外网
-			// fmt.Println("public addrList", addrList)
-			po.OutServiceNet["public|"+localAddr] += n
+		if isRecordPublic {
+			if !strings.HasPrefix(localAddr, "192.168") && !strings.HasPrefix(localAddr, "10.") {
+				//来源于外网
+				// fmt.Println("public addrList", addrList)
+				po.OutServiceNet["public|"+localAddr] += n
+			}
+			if !strings.HasPrefix(remoteAddr, "192.168") && !strings.HasPrefix(remoteAddr, "10.") {
+				// fmt.Println("public addrList", addrList)
+				//来源于外网
+				po.OutServiceNet["public|"+remoteAddr] += n
+			}
 		}
-		if !strings.HasPrefix(remoteAddr, "192.168") && !strings.HasPrefix(remoteAddr, "10.") {
-			// fmt.Println("public addrList", addrList)
-			//来源于外网
-			po.OutServiceNet["public|"+remoteAddr] += n
-		}
+
 		if isAllConn {
 			po.OutServiceNet[remoteAddr] += n
 		}
