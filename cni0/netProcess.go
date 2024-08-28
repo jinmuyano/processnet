@@ -265,12 +265,15 @@ func (pm *processController) Rescan() error {
 
 	// del old pid
 	for pid := range pm.dict {
-		_, ok := ps[pid]
+		_, ok := ps[pid] // 刚获取的进程存在
 		if ok {
 			continue
 		}
 
 		delete(pm.dict, pid)
+		if pm.dict[pid] == nil || pm.dictAddrPid == nil {
+			continue
+		}
 		delete(pm.dictAddrPid, pm.dict[pid].Addr)
 	}
 
