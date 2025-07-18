@@ -37,7 +37,7 @@ func NewPacketClientConfig() PacketClientConfig {
 		Interval:         "60s",
 		IsRecordPublic:   true,
 		ServiceConfigUrl: "",
-		ProcessKeyword:   []string{"java"},
+		ProcessKeyword:   []string{"java","python3"},
 		IsAllConn:        false,
 		// ServiceAddr: map[string]string{
 		// 	"192.168.165.xx:30002":  "zk-bak",
@@ -50,7 +50,7 @@ func NewPacketClientConfig() PacketClientConfig {
 func (c *CniPacketClient) Start() {
 	fmt.Println("cni0 capture start")
 	c.run() //启动+更新数据+分析带宽+结束
-	c.newcron()
+	// c.newcron()
 }
 
 func (c *CniPacketClient) Run() pnet.Result {
@@ -75,7 +75,7 @@ func (c *CniPacketClient) GetBandWidth() pnet.Result {
 }
 
 func (c *CniPacketClient) run() {
-	fmt.Println("cni0 capture start")
+	// fmt.Println("cni0 capture start")
 	netflowStart(c) //启动+更新数据+分析带宽+结束
 }
 
