@@ -92,10 +92,10 @@ func (po *Process) shrink() {
 /*
 1.判断是否公网ip
 */
-func IsPublicIp(ip string) bool {
+func IsPublicIp(addr string) bool {
 	var publicIp = []string{"192.168", "10.", "172.","100."}
 	for _, ip := range publicIp {
-		if strings.HasPrefix(ip, ip) {
+		if strings.HasPrefix(addr, ip) {
 			return false
 		}
 	}
