@@ -407,12 +407,12 @@ func (po *Process) IncreaseOutput(n int64, addr string, serviceAddr map[string]s
 			if IsPublicIp(localAddr) {
 				//来源于外网
 				// fmt.Println("public addrList", addrList)
-				po.InServiceNet["public|"+localAddr] += n
+				po.OutServiceNet["public|"+localAddr] += n
 			}
 			if IsPublicIp(remoteAddr) {
 				// fmt.Println("public addrList", addrList)
 				//来源于外网
-				po.InServiceNet["public|"+remoteAddr] += n
+				po.OutServiceNet["public|"+remoteAddr] += n
 			}
 			// if !strings.HasPrefix(localAddr, "192.168") && !strings.HasPrefix(localAddr, "10.") {
 			// 	//来源于外网
