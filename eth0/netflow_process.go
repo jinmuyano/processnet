@@ -93,7 +93,7 @@ func (po *Process) shrink() {
 1.判断是否公网ip
 */
 func IsPublicIp(ip string) bool {
-	var publicIp = []string{"192.168", "10.", "172.", "100.118"}
+	var publicIp = []string{"192.168", "10.", "172.","100."}
 	for _, ip := range publicIp {
 		if strings.HasPrefix(ip, ip) {
 			return false
@@ -119,6 +119,7 @@ func (po *Process) IncreaseInput(n int64, addr string, serviceAddr map[string]st
 		localAddr := addrList[0]
 		remoteAddr := addrList[1]
 		if isRecordPublic {
+			
 			if IsPublicIp(localAddr) {
 				//来源于外网
 				// fmt.Println("public addrList", addrList)

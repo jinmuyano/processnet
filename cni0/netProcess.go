@@ -311,6 +311,19 @@ func (po *Process) shrink() {
 	}
 }
 
+
+func IsPublicIp(ip string) bool {
+	var publicIp = []string{"192.168", "10.", "172.","100."}
+	for _, ip := range publicIp {
+		if strings.HasPrefix(ip, ip) {
+			return false
+		}
+	}
+	return true //是公网
+
+}
+
+
 func (po *Process) IncreaseInput(n int64, addr string, serviceAddr map[string]string, isAllConn bool, isRecordPublic bool) {
 	// 统计进程外网流量
 	for ipport, service := range serviceAddr {
@@ -324,16 +337,27 @@ func (po *Process) IncreaseInput(n int64, addr string, serviceAddr map[string]st
 		localAddr := addrList[0]
 		remoteAddr := addrList[1]
 		if isRecordPublic {
-			if !strings.HasPrefix(localAddr, "192.168") && !strings.HasPrefix(localAddr, "10.") {
+			if IsPublicIp(localAddr) {
 				//来源于外网
 				// fmt.Println("public addrList", addrList)
 				po.InServiceNet["public|"+localAddr] += n
 			}
-			if !strings.HasPrefix(remoteAddr, "192.168") && !strings.HasPrefix(remoteAddr, "10.") {
+			if IsPublicIp(remoteAddr) {
 				// fmt.Println("public addrList", addrList)
 				//来源于外网
 				po.InServiceNet["public|"+remoteAddr] += n
 			}
+
+			// if !strings.HasPrefix(localAddr, "192.168") && !strings.HasPrefix(localAddr, "10.") {
+			// 	//来源于外网
+			// 	// fmt.Println("public addrList", addrList)
+			// 	po.InServiceNet["public|"+localAddr] += n
+			// }
+			// if !strings.HasPrefix(remoteAddr, "192.168") && !strings.HasPrefix(remoteAddr, "10.") {
+			// 	// fmt.Println("public addrList", addrList)
+			// 	//来源于外网
+			// 	po.InServiceNet["public|"+remoteAddr] += n
+			// }
 		}
 		if isAllConn {
 			po.InServiceNet[localAddr] += n
